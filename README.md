@@ -11,7 +11,7 @@ falsch codiert haben
 - getMS-InstKey (Bash-Script) - liest den MS-Installationsschlüssel aus den ACPI-Tabellen des UEFI/BIOS aus
 Der Zugriff auf diese tabellen benötigt root-Rechte
 
-- kbdremap.sh - meine tastatur ist auf einem refurbished-Computer mit neu beschrifteter Tastatur:
+- kbdremap.sh (Shell-Script) - meine tastatur ist auf einem refurbished-Computer mit neu beschrifteter Tastatur:
 keine < und keine > Taste und kein | Pipe-Zeichen. Das definiere ich mit diesen Befehlszeilen um. 
 CAPS-LOCK und SHIFT-CAPS-LOCK werden zu < und >, SHIFT-SPACE zum | Pipe-Zeichen. 
 Am besten im Verzeichnis /usr/local/bin ablegen.
