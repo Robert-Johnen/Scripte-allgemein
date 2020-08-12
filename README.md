@@ -12,11 +12,11 @@ falsch codiert haben
 Der Zugriff auf diese tabellen benötigt root-Rechte
 
 - kbdremap.sh - meine tastatur ist auf einem refurbished-Computer mit neu beschrifteter Tastatur:
-kein < und keine > Taste und kein | Pipe-Zeichen. das definiere ich mit diesen Befehlszeilen um
-CAPS-LOCK und SHIFT-CAPS-LOCK werdn zu < und >, SHIFT-SPACE zum | Pipe-Zeichen. 
-Am besten im Verzeichnis /usr/local/bin ablegen
+keine < und keine > Taste und kein | Pipe-Zeichen. Das definiere ich mit diesen Befehlszeilen um. 
+CAPS-LOCK und SHIFT-CAPS-LOCK werden zu < und >, SHIFT-SPACE zum | Pipe-Zeichen. 
+Am besten im Verzeichnis /usr/local/bin ablegen.
 
-- kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und
-habe dann für alle Terminals und X die tasten zur Verfügung
+- kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
+habe dann für alle Terminals und X die Tasten abs Systemstart zur Verfügung
 
 - README.md - Diese Datei
