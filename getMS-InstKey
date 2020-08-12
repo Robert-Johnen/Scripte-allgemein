@@ -1,0 +1,17 @@
+#!/bin/bash
+### fragt dem Installationsschluessel von Windows aus den ACPI-Tabellen des UEFI-BIOS ab
+
+MSINSTKEY=`sudo cat /sys/firmware/acpi/tables/MSDM | cut -b 57-`
+
+clear
+echo "Der Installationsschlüssel findet sich im UEFI-Bios in den ACPI-Tabellen"
+echo 
+echo "robert@robertmobil:~> sudo cat /sys/firmware/acpi/tables/MSDM"
+sudo cat /sys/firmware/acpi/tables/MSDM
+echo 
+echo 
+echo "Er lautet auf diesem Gerät: "
+echo 
+echo "${MSINSTKEY}"
+echo 
+

@@ -1,1 +1,1 @@
-# Scripte-allgemein
+# Scripte-Bash
