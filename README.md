@@ -2,12 +2,6 @@
 
 Scripte und kleine Schnipsel, die ab und zu mal zu gebrauchen sind.
 
-- detox (Bash-Script) - Bereinigt einen Datei- oder Verzeichnisnamen von einigen Sonderzeichen (per sed). 
-Ist öfter schon mal hilfreich, wenn man Dateien von Dateisystemen übernimmt, welche die Sonderzeichen 
-falsch codiert haben.
-
-- .detoxrc - enthält die sed-Befehle für Script _detox_. Jede Zeile ein sed-Befehl. Kann natürlich auch erweitert werden.
-
 - getMS-InstKey (Bash-Script) - Liest den MS-Installationsschlüssel aus den ACPI-Tabellen des UEFI/BIOS aus
 Der Zugriff auf diese Tabellen benötigt root-Rechte (deswegen sudo im Script).
 
