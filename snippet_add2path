@@ -17,10 +17,26 @@ add2path() {
     case ":$NEWPATH:" in              
       # den zu iterierenden Teil mit : davor und dahinter --> tue nichts
       *":$i:"*) : ;;                
-      # sonst klebe Iterator hinten an neuen Pfad dran
+      # sonst klebe :Iterator hinten an neuen Pfad dran
       *) NEWPATH="${NEWPATH}:${i}";;    
       esac 
     done 
+  # exportiere $PATH ohne : am Anfang
   export PATH="${NEWPATH/:/}"
   return 0
+  }
+
+# Pfad reduzieren
+rmpath() {
+  # leere temporäre Pfadvariable
+  local TMPPATH
+  # leere Variable für neuen Pfad ohne Duplikate
+  local NEWPATH
+  #Pfad am Anfang und am Ende mit ":" begrenzen
+  TMPPATH=":${PATH}:"
+  # ersettze :$1: durch :
+  NEWPATH="${TMPPATH/:$1:/:}"
+  # Lösche ":" am Anfang und am Ende und exportiere $PATH
+  NEWPATH="${NEWPATH#:}"
+  export PATH="${NEWPATH%:}"
   }
