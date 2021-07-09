@@ -1,0 +1,26 @@
+# Pfad erweitern und von Duplikaten bereinigen
+add2path() {
+  # leere temporäre Pfadvariable
+  local TMPPATH
+  # leere Variable für neuen Pfad ohne Duplikate
+  local NEWPATH
+  # Iterator
+  local i
+  # neuen Pfadteil mit aktuellem Pfad in temp. Var
+  TMPPATH="${1}:${PATH}"
+  # iteriere über alle Elemente des Pfades ( ":" ersetzt durch " ")
+  for i in ${TMPPATH//:/ }
+    do 
+    # gib eine Warnung, wenn ein Teil des Pfades nicht vorhanden ist
+    [ -d $i ] || echo "Das im Pfad enthaltene Verzeichnis $i ist nicht vorhanden" 
+    # enthält der neue Pfad mit : davor und dahinter irgendwie 
+    case ":$NEWPATH:" in              
+      # den zu iterierenden Teil mit : davor und dahinter --> tue nichts
+      *":$i:"*) : ;;                
+      # sonst klebe Iterator hinten an neuen Pfad dran
+      *) NEWPATH="${NEWPATH}:${i}";;    
+      esac 
+    done 
+  export PATH="${NEWPATH/:/}"
+  return 0
+  }
