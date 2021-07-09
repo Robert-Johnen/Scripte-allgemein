@@ -26,7 +26,9 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 - snippet_prompt - Prompt mit Anzeige errorlevel<>0 für die .profile oder .bashrc
 
 ✓ robert@robertmobil:~ $> true
+
 ✓ robert@robertmobil:~ $> false
+
 ✗ robert@robertmobil:~ $> 
 
 - README.md - Diese Datei
