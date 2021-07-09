@@ -1,6 +1,4 @@
-# Scripte-allgemein
-
-Scripte und kleine Schnipsel, die ab und zu mal zu gebrauchen sind.
+# kurze Scripte
 
 - getMS-InstKey (Bash-Script) - Liest den MS-Installationsschlüssel aus den ACPI-Tabellen des UEFI/BIOS aus
 Der Zugriff auf diese Tabellen benötigt root-Rechte (deswegen sudo im Script).
@@ -13,14 +11,16 @@ Am besten im Verzeichnis /usr/local/bin ablegen.
 - kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
 habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
-- snippet_add2path+rmpath - zwei Funktionen für die .alias, die den Suchpfad verändern
+# Schnipsel (oder Funktionen für die .alias)
 
-~> add2path /Ver/zeich/nis fügt dem Suchpfad ($PATH) /Ver/zeich/nis hinzu und enfernt doppelt vorkommende Verzeichnisse
+- snippet_add2path+rmpath - zwei Funktionen, die den Suchpfad erweitern oder verkürzen
 
-~> rmpath /Ver/zeich/nis entfernt /Ver/zeich/nis aus dem Suchpfad ($PATH)
+~> add2path /Ver/zeich/nis # fügt dem Suchpfad ($PATH) /Ver/zeich/nis hinzu und enfernt doppelt vorkommende Verzeichnisse
+
+~> rmpath /Ver/zeich/nis # entfernt /Ver/zeich/nis aus dem Suchpfad ($PATH)
 
 - snippet_file2clipboard - schiebt eine Datei von der Konsole in die X-Zwischenablage
 
-~> file2xclipbd /Verzeichnis/Datei
+~> file2xclipbd /Verzeichnis/Datei # kann dan mit [Strg]+[V] eingefügt werden
 
 - README.md - Diese Datei
