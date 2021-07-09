@@ -21,7 +21,7 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
 - snippet_file2clipboard - schiebt eine Datei von der Konsole in die X-Zwischenablage
 
-~> file2xclipbd /Verzeichnis/Datei # kann dan mit [Strg]+[V] eingefügt werden
+~> file2xclipbd /Verzeichnis/Datei # kann dann mit [Strg]+[V] eingefügt werden
 
 - snippet_prompt - Prompt mit Anzeige errorlevel<>0 für die .profile oder .bashrc
 
