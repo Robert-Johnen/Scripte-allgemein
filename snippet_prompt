@@ -1,0 +1,6 @@
+# ich will meinen Prompt schön bunt mit folgenden Infos:
+# $? (Errorlevel=0) des letzten Befehls
+#    Haken (grün) für alles ok
+#    X (rot) für Fehler
+# aktiver User@Host pwd ($/#)
+export PS1='$([[ $? -eq 0 ]] && echo "\[\e[1;32m\]✓\[\e[0m\]" || echo "\[\e[1;31m\]✗\[\e[0m\]") \[\e[32;1m\]\u@\h:\w\[\e[0m\] \$> '
