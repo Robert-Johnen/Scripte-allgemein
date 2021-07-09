@@ -11,7 +11,7 @@ Am besten im Verzeichnis /usr/local/bin ablegen.
 - kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
 habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
-# Schnipsel (oder Funktionen für die .alias)
+# Schnipsel (oder Funktionen für die .alias, .profile oder .bashrc)
 
 - snippet_add2path+rmpath - zwei Funktionen, die den Suchpfad erweitern oder verkürzen
 
@@ -22,5 +22,11 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 - snippet_file2clipboard - schiebt eine Datei von der Konsole in die X-Zwischenablage
 
 ~> file2xclipbd /Verzeichnis/Datei # kann dan mit [Strg]+[V] eingefügt werden
+
+- snippet_prompt - Prompt mit Anzeige errorlevel<>0 für die .profile oder .bashrc
+
+✓ robert@robertmobil:~ $> true
+✓ robert@robertmobil:~ $> false
+✗ robert@robertmobil:~ $> 
 
 - README.md - Diese Datei
