@@ -13,4 +13,8 @@ Am besten im Verzeichnis /usr/local/bin ablegen.
 - kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
 habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
+- snippet_add2path - zwei Funktionen für die .alias, die den Suchpfad verändern
+# add2path /Ver/zeich/nis fügt dem Suchpfad ($PATH) /Ver/zeich/nis hinzu und enfernt doppelt vorkommende Verzeichnisse
+# rmpath /Ver/zeich/nis entfernt /Ver/zeich/nis aus dem Suchpfad ($PATH)
+
 - README.md - Diese Datei
