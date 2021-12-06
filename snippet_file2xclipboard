@@ -1,0 +1,3 @@
+file2xclipbd() {
+  { echo -e "---- Datei: ${1##*/} ----\n" | cat - "${1}" ; echo -e "\n---- EOF ----" ; } | xclip -i -selection clipboard 
+  }
