@@ -11,7 +11,7 @@ export CYAN=$(echo -en '\001\033[01;36m\002')
 export LIGHTGRAY=$(echo -en '\001\033[01;37m\002')
 export GRAY=$(echo -en '\001\033[01;90m\002')
 export WHITE=$(echo -en '\001\033[01;97m\002')
-export CGOOD=$(echo -en '\001\033[1;36;102m\002') # grüner fette Schrift mit hellgrünem Hintergrund
+export CGOOD=$(echo -en '\001\033[1;36;102m\002') # grüne fette Schrift mit hellgrünem Hintergrund
 export CERROR=$(echo -en '\001\033[1;31;103m\002') # rote fette Schrift mit gelbbraunem Hintergrund
 
 # ich will meinen Prompt schön bunt mit folgenden Infos:
