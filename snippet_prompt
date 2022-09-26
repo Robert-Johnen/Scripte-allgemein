@@ -1,6 +1,31 @@
+# Farbcodes --> echon -en und oktaldarstellungsorgt dafür, dass bei der Nutzung im Prompt die
+# Zeichen richtig gezählt werden, wenn die Befehlszeile über mehrere Zeilen geht...
+export CRESET=$(echo -en '\001\033[0m\002')
+export BLACK=$(echo -en '\001\033[01;30m\002')
+export RED=$(echo -en '\001\033[01;31m\002')
+export GREEN=$(echo -en '\001\033[01;32m\002')
+export YELLOW=$(echo -en '\001\033[01;33m\002')
+export BLUE=$(echo -en '\001\033[01;34m\002')
+export MAGENTA=$(echo -en '\001\033[01;35m\002')
+export CYAN=$(echo -en '\001\033[01;36m\002')
+export LIGHTGRAY=$(echo -en '\001\033[01;37m\002')
+export GRAY=$(echo -en '\001\033[01;90m\002')
+export WHITE=$(echo -en '\001\033[01;97m\002')
+export CGOOD=$(echo -en '\001\033[1;36;102m\002') # grüner fette Schrift mit hellgrünem Hintergrund
+export CERROR=$(echo -en '\001\033[1;31;103m\002') # rote fette Schrift mit gelbbraunem Hintergrund
+
 # ich will meinen Prompt schön bunt mit folgenden Infos:
-# $? (Errorlevel=0) des letzten Befehls
+# Zeile 1: 
+#    $? (Errorlevel=0) des letzten Befehls
 #    Haken (grün) für alles ok
-#    X (rot) für Fehler
-# aktiver User@Host pwd ($/#)
-export PS1='$([[ $? -eq 0 ]] && echo "\[\e[1;32m\]✓\[\e[0m\]" || echo "\[\e[1;31m\]✗\[\e[0m\]") \[\e[32;1m\]\u@\h:\w\[\e[0m\] \$> '
+#    X (rot) mit Exitcode für Fehler mit Datum(\d), Zeit(\t) 
+#    und aktueller Verzeichnisname(\W) mit der Anzahl der
+#    noch laufenden Hintergrundjobs(\j)
+# Zeile 2
+#    Anzahl und Art der Verzeichniseinträge im aktuellen Verzeichnis
+#    (ls -al | grep -e ^[dlp-] | wc -l) ^d Dir ^l Links ^- Dateien ^- FiFos
+# Zeile 3:
+#    User(\u), Host(\h) und kompletten aktuellem Vezeichnispfad(\w) mit 
+#    angepassten Prompt(\$) bei root(#) und user($)
+export PS1='$([[ $? -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ Exitcode $? ")${CRESET} ${MAGENTA}| \d - \t Uhr in [\W] | \j Hintergrundjob(s)\n${CYAN}$(ls -al | grep -e ^l | wc -l) Link(s) | $(ls -al | grep -e ^d | wc -l) Verzeichnis(se) | $(ls -al | grep -e ^- | wc -l) Datei(en) | $(ls -al | grep -e ^p | wc -l) FIFO(s)\n$([[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})\u@\h:${BLUE}\w${CRESET} \$> '
+
