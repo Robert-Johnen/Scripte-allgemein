@@ -11,7 +11,7 @@ Am besten im Verzeichnis /usr/local/bin ablegen.
 - kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
 habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
-- .alias -Funktionen und kurze Schnipsel,um das CLI für mich angenehmer zu machen:  
+- .alias - Funktionen und kurze Schnipsel, um das CLI für mich angenehmer zu machen:  
   --> Funktion *_colorCodesPrompt*:    
     Aufruf: 
     `~ $> _colorCodesPrompt`      
