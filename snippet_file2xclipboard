@@ -1,3 +1,22 @@
-file2xclipbd() {
-  { echo -e "---- Datei: ${1##*/} ----\n" | cat - "${1}" ; echo -e "\n---- EOF ----" ; } | xclip -i -selection clipboard 
+_f2xcb() {
+  ### Inhalt vom Datei (als 1. Parameter uebergeben) soll ab ins Clipboard
+  local lv_datei="${1}"
+  # Dateiname aus Parameter holen
+  local lv_nointro="${2:-0}"
+  # Standard (2. Parameter leer) ist mit Intro und Abspann in die Zwischenablage >0 dann ohne Intro und Abspann
+  local lv_ccommand="xclip -i -selection clipboard" #XOrg
+  # Standardkommando fuer Zwischenablage X11
+  echo $DESKTOP_SESSION | grep way 1>/dev/null 2>&1 && lv_ccommand="wl-copy" #Wayland
+  # oder Umschalten auf anderes Kommando wenn Wayland
+  [ -e "${lv_datei}" ] && { 
+  #Datei existiert, dann
+    [ $lv_nointro -eq 0 ] && echo -e "----8<----8<---- Datei: ${lv_datei##*/} ----8<----8<----\n"
+    # intro in auf stdout, wenn gewuenscht
+    cat "${lv_datei}" 
+    # Dateiinhalt auf stdout
+    [ $lv_nointro -eq 0 ] && echo -e "\n---->8---->8---- EOF ---->8---->8----"  
+    # Abspann auf stdout, wenn gewuenscht
+    } | eval "${lv_ccommand}"
+    # stdout Kommando fuer Zwischenablage pipen
   }
+  
