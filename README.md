@@ -15,10 +15,10 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
 
   --> Funktion *_colorCodesPrompt*:    
     Aufruf: 
-    `~ $> _colorCodesPrompt    
-    exportiert Variablen an die Shell, um farbige Ausgaben zu ermöglichen:        
-    ~ $> echo "${MAGENTA} magentafarbiger Text ${GREEN} grüner Text ${CRESET} Text mit Standardfarbe"        
-    wird auch von Funktion _mxPSx genutzt.    `
+    `~ $> _colorCodesPrompt`      
+    `exportiert Variablen an die Shell, um farbige Ausgaben zu ermöglichen:`  
+    `~ $> echo "${MAGENTA} magentafarbiger Text ${GREEN} grüner Text ${CRESET} Text mit Standardfarbe"`  
+    `wird auch von Funktion _mxPSx genutzt.`  
   
   --> Funktion *_myPSx*:
       
