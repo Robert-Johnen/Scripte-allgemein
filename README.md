@@ -29,13 +29,17 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
   --> Funktion *_myPSx*:
       
       Aufruf:
-      
-      ~ $> _myPSx 
-      
-      Ergebnis:`  
+   `  
       robert@robertmobil:~ $> _myPSx 0  
       >>> Do Feb 09 | 12:24:11 Uhr >>>  
       <<< Do Feb 09 | 12:24:11 Uhr <<<  
        ✓  | Mails: 0 | lfd. bg-Jobs: 0 | lfd. screen: 0 | lfd. tmux: 1  
       [~] | Links: 12 | Verzeichnisse: 58 | Dateien: 35 | FIFOs: 0  
-      robert@robertmobil:~ $>`  
+      robert@robertmobil:~ $> _myPSx 1 _myPSx 1
+      >>> Do Feb 09 | 12:28:21 Uhr >>>
+       ✓ robert@robertmobil:~ $> bla
+      Wenn 'bla' kein Tippfehler ist, können Sie command-not-found benutzen, um das Paket zu finden, das den Befehl enthält, z. B.:
+      cnf bla
+       ✗ (127) robert@robertmobil:~ $>  `  
+       
+       
