@@ -1,0 +1,37 @@
+_dc() { 
+  ### Befehl als Parameter uebergeben, abarbeiten, stdout und stderr ausgeben
+  ### und gleichzeitig mit Befehlszeile und Exitcode in Datei umleiten
+  ### und das ganze dann in die Zwischenablage schieben
+  local lv_cline="$@"                    
+  # alle Parameter der Befehlszeile holen
+  local lv_dir=$(pwd)                    
+  # aktuelles Verzeichnis feststellen
+  local lv_tmpfile="/tmp/_dc.${USER}"    
+  # Dateifuer Ausgabeumleitung
+  local lv_uchar="$"                     
+  # $ (normaler User=Standard) # (root)
+  local lv_estring="✓"                   
+  # Ausgabe bei Exitcode 0 (Standard)
+  local lv_ecode=0                       
+  # Variable zumspeichern des Exitcodes
+  [ $UID -eq 0 ] && lv_uchar="#"         
+  # wenn root Char aendern
+  echo " ${lv_estring} ${USER}@${HOST}:${lv_dir} ${lv_uchar}> ${lv_cline}" >"${lv_tmpfile}"
+  # Befehlszeile mit Prompt in Datei schreiben
+  set -o pipefail                                   
+  # ich will den Exitcode des Kommandos, nicht den von tee
+  eval "${lv_cline} 2>&1 | tee -a ${lv_tmpfile}"    
+  # Kommando ausfuehren mit Ausgabeumleitung auf stdout und in Datei
+  lv_ecode=$?                                       
+  # Exitcode zwischenspeichern
+  set +o pipefail
+  # wieder auf Standard zurueck
+  [ $lv_ecode -gt 0 ] && lv_estring="✗ ($lv_ecode)" 
+  # bei Fehler Exitcode ausgeben
+  echo " ${lv_estring} ${USER}@${HOST}:${lv_dir} ${lv_uchar}> " >>"${lv_tmpfile}"
+  # Exitcode mit endeprompt in Datei schreiben
+  [ -z $DISPLAY ] || _f2xcb "${lv_tmpfile}" 1       
+  # wenn DISPLAY gesetzt, dann in Dateiinhalt in Zwischenablage ablegen
+  return $lv_ecode
+  # zwischengespeicherten Exitcode an stdout weiterreichen
+  }
