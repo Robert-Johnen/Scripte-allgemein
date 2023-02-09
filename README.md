@@ -32,10 +32,10 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
       
       ~ $> _myPSx 
       
-      Ergebnis:
-      robert@robertmobil:~ $> _myPSx 0
->>> Do Feb 09 | 12:24:11 Uhr >>>
-<<< Do Feb 09 | 12:24:11 Uhr <<<
- ✓  | Mails: 0 | lfd. bg-Jobs: 0 | lfd. screen: 0 | lfd. tmux: 1
-[~] | Links: 12 | Verzeichnisse: 58 | Dateien: 35 | FIFOs: 0
-robert@robertmobil:~ $>
+      Ergebnis:`  
+      robert@robertmobil:~ $> _myPSx 0  
+      >>> Do Feb 09 | 12:24:11 Uhr >>>  
+      <<< Do Feb 09 | 12:24:11 Uhr <<<  
+       ✓  | Mails: 0 | lfd. bg-Jobs: 0 | lfd. screen: 0 | lfd. tmux: 1  
+      [~] | Links: 12 | Verzeichnisse: 58 | Dateien: 35 | FIFOs: 0  
+      robert@robertmobil:~ $>`  
