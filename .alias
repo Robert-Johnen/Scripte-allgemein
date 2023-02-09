@@ -80,13 +80,13 @@ _f2xcb() {
   [ -e "${lv_datei}" ] && { 
   #Datei existiert, dann
     [ $lv_nointro -eq 0 ] && echo -e "----8<----8<---- Datei: ${lv_datei##*/} ----8<----8<----\n"
-    # intro in auf stdout, wenn gewuenscht
+    # intro auf stdout, wenn gewuenscht
     cat "${lv_datei}" 
     # Dateiinhalt auf stdout
     [ $lv_nointro -eq 0 ] && echo -e "\n---->8---->8---- EOF ---->8---->8----"  
     # Abspann auf stdout, wenn gewuenscht
     } | eval "${lv_ccommand}"
-    # stdout Kommando fuer Zwischenablage pipen
+    # stdout in Kommando fuer Zwischenablage pipen
   }
   
 _dc() { 
