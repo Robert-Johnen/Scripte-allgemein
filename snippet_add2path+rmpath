@@ -1,42 +1,26 @@
-# Pfad erweitern und von Duplikaten bereinigen
-add2path() {
-  # leere temporäre Pfadvariable
-  local TMPPATH
-  # leere Variable für neuen Pfad ohne Duplikate
-  local NEWPATH
-  # Iterator
-  local i
-  # neuen Pfadteil mit aktuellem Pfad in temp. Var
-  TMPPATH="${1}:${PATH}"
-  # iteriere über alle Elemente des Pfades ( ":" ersetzt durch " ")
-  for i in ${TMPPATH//:/ }
+_add2Path() {
+  ### Pfad erweitern und von Duplikaten bereinigen
+  local lv_tmppath="${1}:${PATH}"          # leere temporäre Pfadvariable
+  local lv_newpath                         # leere Variable für neuen Pfad ohne Duplikate
+  local lv_i                               # Iterator
+  
+
+  for lv_i in ${lv_tmppath//:/ }              # iteriere über alle Elemente des Pfades
     do 
-    # gib eine Warnung, wenn ein Teil des Pfades nicht vorhanden ist
-    [ -d $i ] || echo "Das im Pfad enthaltene Verzeichnis $i ist nicht vorhanden" 
-    # enthält der neue Pfad mit : davor und dahinter irgendwie 
-    case ":$NEWPATH:" in              
-      # den zu iterierenden Teil mit : davor und dahinter --> tue nichts
-      *":$i:"*) : ;;                
-      # sonst klebe :Iterator hinten an neuen Pfad dran
-      *) NEWPATH="${NEWPATH}:${i}";;    
+    [ -d $lv_i ] || echo "Das im Pfad enthaltene Verzeichnis $lv_i ist nicht vorhanden" 
+    case ":$lv_newpath:" in                # enthält der neue Pfad mit : davor und dahinter irgendwie 
+      *":$lv_i:"*) : ;;                    # den zu iterierenden Teil mit : davor und dahinter --> tue nichts
+      *) lv_newpath="${lv_newpath}:${lv_i}";;    # sonst klebe Iterator hinten an neuen Pfag dran
       esac 
     done 
-  # exportiere $PATH ohne : am Anfang
-  export PATH="${NEWPATH/:/}"
+  export PATH="${lv_newpath/:/}"
   return 0
   }
 
-# Pfad reduzieren
-rmpath() {
-  # leere temporäre Pfadvariable
-  local TMPPATH
-  # leere Variable für neuen Pfad ohne Duplikate
-  local NEWPATH
-  #Pfad am Anfang und am Ende mit ":" begrenzen
-  TMPPATH=":${PATH}:"
-  # ersettze :$1: durch :
-  NEWPATH="${TMPPATH/:$1:/:}"
-  # Lösche ":" am Anfang und am Ende und exportiere $PATH
-  NEWPATH="${NEWPATH#:}"
-  export PATH="${NEWPATH%:}"
+_rmPath() {
+  ### Pfad reduzieren
+  local lv_tmppath=":${PATH}:"
+  local lv_newpath="${lv_tmppath/:$1:/:}"
+  lv_newpath="${lv_newpath#:}"
+  export PATH="${lv_newpath%:}"
   }
