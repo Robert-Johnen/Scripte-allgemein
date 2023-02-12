@@ -1,0 +1,220 @@
+#!/bin/bash
+
+_colorCodesPrompt() {
+  ### setzt Variablen fuer die Farbcodes am Prompt im Terminal
+  export CRESET=$(echo -en '\001\033[0m\002')
+  export BLACK=$(echo -en '\001\033[01;30m\002')
+  export RED=$(echo -en '\001\033[01;31m\002')
+  export GREEN=$(echo -en '\001\033[01;32m\002')
+  export YELLOW=$(echo -en '\001\033[01;33m\002')
+  export BLUE=$(echo -en '\001\033[01;34m\002')
+  export MAGENTA=$(echo -en '\001\033[01;35m\002')
+  export CYAN=$(echo -en '\001\033[01;36m\002')
+  export LIGHTGRAY=$(echo -en '\001\033[01;37m\002')
+  export GRAY=$(echo -en '\001\033[01;90m\002')
+  export WHITE=$(echo -en '\001\033[01;97m\002')
+  export CGOOD=$(echo -en '\001\033[1;36;102m\002')
+  export CERROR=$(echo -en '\001\033[1;31;103m\002')
+  # printf "${CRESET}"
+  }
+
+_myPSx() {
+  ### mein Definition eines Prompts
+  _colorCodesPrompt
+  # schoene bunte Welt machen
+  # lokale Variable wenn $lv_myPS1 0 oder leer dann schön bunt und ausfuehrlich
+  # ansonsten >0 dann grau und kurz
+  local lv_myPS1="${1:-0}" # kein Parameter, dann 0
+  [[ $lv_myPS1 -eq 0 ]] && {
+    # Startzeit des Jobs vor der Ausführung anzeigen
+    export PS0='${MAGENTA}>>> \d | \t Uhr >>>${CRESET}\n'
+    # Ende-Zeit des Jobs anzeigen.
+    # das ginge noch genauer, aber dann wird der Exitcode im Prompt vermasselt :-(. Der ist mir wichtiger.
+    # Exitcode des letzten Prozesses sichern, Mails imPostfach /  aktuelles Verzeichnis / laufende Hintergrundjobs / Mails im Postfach
+    # Zahl der Links, Dateien, Verzeichnisse und FIFOs im akt. Verzeichnis
+    # USER@HOST:PATH
+    # das ganze schön bunt :-)
+    export PS1='${MAGENTA}<<< \d | \t Uhr <<<\n$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CRESET}${WHITE} | Mails: $(grep -c "^Return-Path: " /var/spool/mail/${USER} 2>/dev/null || echo -n "0") | lfd. bg-Jobs: \j | lfd. screen: $(screen -ls 2>/dev/null | grep Detached | wc -l) | lfd. tmux: $(tmux ls 2>/dev/null | wc -l)\n${RED}[${BLUE}\W${RED}]${CYAN} | Links: $(ls -al | grep -e ^l | wc -l) | Verzeichnisse: $(ls -al | grep -e ^d | wc -l) | Dateien: $(ls -al | grep -e ^- | wc -l) | FIFOs: $(ls -al | grep -e ^p | wc -l)\n$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CRESET} \$> '
+    } || {
+    # # mein Standardprompt in kurz
+    export PS0=''
+    export PS1='$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo " ✓ " || echo " ✗ ($lv_ecode) "; } )$( [[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:\w \$> '
+    }
+  }
+  
+_add2Path() {
+  ### Pfad erweitern und von Duplikaten bereinigen
+  local lv_tmppath="${1}:${PATH}"          
+  #  temporäre Pfadvariable
+  local lv_newpath                         
+  # leere Variable für neuen Pfad ohne Duplikate
+  local lv_i                               
+  # Iterator
+  for lv_i in ${lv_tmppath//:/ }              
+  # iteriere über alle Elemente des Pfades
+    do 
+    [[ -d $lv_i ]] || echo "Das im Pfad enthaltene Verzeichnis $lv_i ist nicht vorhanden" 
+    # melde, wenn ein Verzeichnis nicht vorhanden ist
+    case ":$lv_newpath:" in                
+    # enthält der neue Pfad mit : davor und dahinter irgendwie 
+      *":$lv_i:"*) : ;;                    
+      # den zu iterierenden Teil mit : davor und dahinter --> tue nichts
+      *) lv_newpath="${lv_newpath}:${lv_i}";;    
+      # sonst klebe Iterator hinten an neuen Pfag dran
+      esac 
+    done 
+  export PATH="${lv_newpath/:/}"
+  # neue Pfadvariableexportieren
+  return 0
+  # Exitcode der Funktion auf jeden Fall 0
+  }
+
+_rmPath() {
+  ### Pfad reduzieren
+  local lv_tmppath=":${PATH}:"
+  # vorne und Hinten : drankleben
+  local lv_newpath="${lv_tmppath/:$1:/:}"
+  # hole aus Pfad den angegebenen Parameter raus, wenn er drinsteht
+  lv_newpath="${lv_newpath#:}"
+  export PATH="${lv_newpath%:}"
+  # nimm die : am Ende und am Anfang wieder weg und exportiereden Pfad
+  return 0
+  # Exitcode 0
+  }
+
+_f2xcb() {
+  ### Inhalt vom Datei (als 1. Parameter uebergeben) soll ab ins Clipboard
+  local lv_datei="${1}"
+  # Dateiname aus Parameter holen
+  local lv_nointro="${2:-0}"
+  # Standard (2. Parameter leer) ist mit Intro und Abspann in die Zwischenablage >0 dann ohne Intro und Abspann
+  local lv_ccommand="xclip -i -selection clipboard" #XOrg
+  # Standardkommando fuer Zwischenablage X11
+  echo $DESKTOP_SESSION | grep way 1>/dev/null 2>&1 && lv_ccommand="wl-copy" #Wayland
+  # oder Umschalten auf anderes Kommando wenn Wayland
+  [[ -e "${lv_datei}" ]] && { 
+  #Datei existiert, dann
+    [[ $lv_nointro -eq 0 ]] && echo -e "----8<----8<---- Datei: ${lv_datei##*/} ----8<----8<----\n"
+    # intro auf stdout, wenn gewuenscht
+    cat "${lv_datei}" 
+    # Dateiinhalt auf stdout
+    [[ $lv_nointro -eq 0 ]] && echo -e "\n---->8---->8---- EOF ---->8---->8----"  
+    # Abspann auf stdout, wenn gewuenscht
+    } | eval "${lv_ccommand}"
+    # stdout in Kommando fuer Zwischenablage pipen
+  }
+  
+_dc() { 
+  ### Befehl als Parameter uebergeben, abarbeiten, stdout und stderr ausgeben
+  ### und gleichzeitig mit Befehlszeile und Exitcode in Datei umleiten
+  ### und das ganze dann in die Zwischenablage schieben
+  local lv_cline="$@"                    
+  # alle Parameter der Befehlszeile holen
+  local lv_dir=$(pwd)                    
+  # aktuelles Verzeichnis feststellen
+  local lv_tmpfile="/tmp/_dc.${USER}"    
+  # Dateifuer Ausgabeumleitung
+  local lv_uchar="$"                     
+  # $ (normaler User=Standard) # (root)
+  local lv_estring="✓"                   
+  # Ausgabe bei Exitcode 0 (Standard)
+  local lv_ecode=0                       
+  # Variable zumspeichern des Exitcodes
+  [[ $UID -eq 0 ]] && lv_uchar="#"         
+  # wenn root Char aendern
+  echo " ${lv_estring} ${USER}@${HOST}:${lv_dir} ${lv_uchar}> ${lv_cline}" >"${lv_tmpfile}"
+  # Befehlszeile mit Prompt in Datei schreiben
+  set -o pipefail                                   
+  # ich will den Exitcode des Kommandos, nicht den von tee
+  eval "${lv_cline} 2>&1 | tee -a ${lv_tmpfile}"    
+  # Kommando ausfuehren mit Ausgabeumleitung auf stdout und in Datei
+  lv_ecode=$?                                       
+  # Exitcode zwischenspeichern
+  set +o pipefail
+  # wieder auf Standard zurueck
+  [[ $lv_ecode -gt 0 ]] && lv_estring="✗ ($lv_ecode)" 
+  # bei Fehler Exitcode ausgeben
+  echo " ${lv_estring} ${USER}@${HOST}:${lv_dir} ${lv_uchar}> " >>"${lv_tmpfile}"
+  # Exitcode mit endeprompt in Datei schreiben
+  [[ -z $DISPLAY ]] || _f2xcb "${lv_tmpfile}" 1       
+  # wenn DISPLAY gesetzt, dann in Dateiinhalt in Zwischenablage ablegen
+  return $lv_ecode
+  # zwischengespeicherten Exitcode an stdout weiterreichen
+  }
+
+# cd  nur durch Verzeichniseingabe
+# shopt -s autocd
+
+_sucheSub() {
+  ### suche nach Substring in alises, Funktionen, ausfuehrbaren Dateien
+  local lv_status=1
+  if [[ -z "$1" ]]; then
+    echo "Aufruf mit user@host:~/> _sucheSub substring"
+    return 2
+  fi
+  alias | grep "$1[^ ]*=" && lv_status=0
+  declare -F | awk '$3 !~ /^_/ {print $3"()"}' | fgrep "$1" && lv_status=0
+  for d in $(sed 's/:/ /g' <<<$PATH); do
+    for f in $d/*"$1"*; do
+      if [ -x "$f" -a -f "$f" ]; then
+        echo "$f"
+        lv_status=0
+      fi
+    done
+  done
+  return $lv_status
+  }
+
+alias dir='dir -l --color=auto'
+alias lc='ls --color=auto'
+# alles was Synchronisation und Backup angeht
+alias uniras='unison -ui text raspi'
+alias uniusb='unison -ui text usb'
+alias unisig='sync2sig'
+alias backupetc='sudo tar -cjpf ~/.backup/`date +%Y%m%d-%H%M%S`-etc@${HOSTname}.tar.bz2 /etc /usr/etc /usr/local/etc'
+alias backup='tar -cjpf ~/.backup/`date +%Y%m%d-%H%M%S`-${USER}@${HOSTNAME}.tar.bz2'
+#alias syns='screen -r sync2usb'
+# Fetchmail und Spamfilter lernen lassen
+#alias spaml='sa-learn --spam --mbox ~/.Mail/localhost/Junk'
+#alias fmlog='fetchmail && tail -f /home/robert/fetchmail.log'
+# Updates und Upgrades installationen und suchen von Softwarepaketen
+alias oupd='tmux new -s OSDistUp "sudo zypper dup -l --replacefiles; bash -i"'
+alias oinst='sudo zypper in'
+alias ozse='sudo zypper se'
+alias rupd='tmux new -s RASDistUp "sudo apt update; sudo apt upgrade; sudo apt dist-upgrade; bash -i"'
+alias rinst='sudo apt-get install -y --install-suggests'
+#alias rzse='dpkg-query -S "$@"'
+# shutdown , hibernate und Standby
+alias reb='sudo /sbin/shutdown -r now'
+alias hib='sudo /usr/sbin/s2ram'
+alias off='sudo /sbin/shutdown -h now'
+# Bluetooth schaltet sich manchmal ab
+alias btt='bluetooth toggle; sleep 3; bluetooth toggle;'
+alias bto='bluetooth on'
+# Logfiles und grafische darstellung
+alias bsplot='systemd-analyze plot > bootchart.svg && inkscape bootchart.svg && rm bootchart.svg'
+alias deplot='systemd-analyze dot | dot -Tsvg > abhaengigkeiten.svg && inkscape abhaengigkeiten.svg && rm abhaengigkeiten.svg'
+alias xlog='less /var/log/Xorg.0.log'
+alias nlog='cat /var/log/tbsnews.log'
+alias slog='sudo journalctl -n 30 -f'
+# abkuerzungen mit mc
+alias mcsm='mc ~/bin/ServiceMenu ~/bin/ServiceMenu/in-use'
+alias mcsc='mc ~/bin ~/bin/scribus'
+alias mcgit='mc ~/bin ~/bin/git'
+alias mcrmd='mc /mnt/removableDrives ~'
+alias mcv='mc ~/Videos ~/Videos/Videos@mediaPi'
+alias mcm='mc ~/Musik ~/Musik/Musik@mediaPi'
+alias mcb='mc ~/Bilder ~/Bilder/Bilder@mediaPi'
+alias mch='mc ~ /mnt/${USER}Pi'
+# diverse
+alias mplay='mplayer -nogui -fs -zoom'
+alias iset='IFS=$"\n\t"'
+alias ireset='IFS=$" \n\t"'
+#alias dir='ls -al "$@"'
+alias cgit='git commit -m "updated `date +%Y%m%d-%H%M%S`"; git push origin master'
+alias ydl='youtube-dl -a ~/ydl -o "~/Videos/e%(autonumber)02d.%(ext)s" --autonumber-start'
+#systemctl
+alias sysstat='sudo systemctl status'
+alias sysstop='sudo systemctl stop'
+alias sysstart='sudo systemctl start'
+alias journal='sudo journalctl'
