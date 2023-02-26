@@ -16,7 +16,7 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
     `# exportiert Variablen an die Shell, um farbige Ausgaben zu ermöglichen:`  
     
   --> Funktion *_myPSx [01234]*:  
-    `Ändert den Prompt so, wie ich ihne habenmöchte'
+    `# Ändert den Prompt so, wie ich ihne haben möchte'
     
   --> Funktion *_f2clb /Pfad/Datei*:  
     `# pipt den Inhalt der Datei in die X-Zwischenablage (0 oder kein 2. Parameter, mit Intro und Abspann, 1 ohne Intro und abspann) und wird von der Funktion _dc benötigt. Funktioniert auch mit Wayland.`
