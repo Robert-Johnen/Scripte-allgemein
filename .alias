@@ -31,7 +31,7 @@ export PS4_orig="${PS4}"
 # auf /home/$USER geprüft und durch ~ ersetzt.
 # ist das irgendwo nicht der Fall macht die 
 # Funktion einfach nichts mit Errorlevel 0
-ppwd || ppwd() { true; }
+ppwd 2>/dev/null || ppwd() { true; }
 
 _myPSx() {
   ### mein Definition eines Prompts
