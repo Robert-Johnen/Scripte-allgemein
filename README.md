@@ -17,6 +17,12 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
     
   --> Funktion *_myPSx [01234]*:  
     `# Ändert den Prompt so, wie ich ihne haben möchte, Standard ist bunt, " $? ssh:user@host:~ $> "`  
+  
+  --> Funktion *_add2Path /Verzeichnis*:
+    `# Ergänzt den $PATH des Users um /Verzeichnis, wenn /Verzeichnis nicht existiert erfolgt eine Meldung darüber, ergänzt wird es aber`  
+    
+  --> Funktion *_rmPath /Verzeichnis*:
+    `# Entfernt /Verzeichnis aus $PATH des Users`  
     
   --> Funktion *_f2clb /Pfad/Datei [01]*:  
     `# pipt den Inhalt der Datei in die X-Zwischenablage (2. Parameter: 0 oder nichts , mit Intro und Abspann (Standard), 1 ohne Intro und Abspann) und wird von der Funktion _dc benötigt. Funktioniert auch mit Wayland.`
@@ -25,6 +31,6 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
     `# führt den Befehl 'command' aus, macht eine Ausgabe auf stdout und eine in die Datei /tmp/_dc.${USER}. Der Inhalt der Datei landet dabei direkt in der X-Zwischenablage.`  
     
   --> Funktion *_sucheSub String*:
-    `# sucht die Buchstabenfolge "String" in jedem alias, jeder geladenen Funktion und allen ausführbaren Dateien im Pfad und wirft alle Fundstellen als Ergebnis aus`
+    `# sucht die Buchstabenfolge "String" in jedem alias, jeder geladenen Funktion und allen ausführbaren Dateien im Pfad und wirft alle Fundstellen als Ergebnis aus`  
        
        
