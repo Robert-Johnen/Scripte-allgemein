@@ -18,8 +18,8 @@ _colorCodesPrompt() {
   # printf "${CRESET}"
   }
 
-# bevor ich den Prompt verändere, 
-# speichere ich die Promptvariablenin
+# bevor ich Variablen verändere, 
+# speichere ich die Variablen
 # damit ich sie notfalls zurücksetzen kann
 export PS0_orig="${PS0}"
 export PS1_orig="${PS1}"
