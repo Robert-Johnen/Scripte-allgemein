@@ -18,10 +18,10 @@ habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
   --> Funktion *_myPSx [01234]*:  
     `# Ändert den Prompt so, wie ich ihne haben möchte, Standard ist bunt, " $? ssh:user@host:~ $> "`  
   
-  --> Funktion *_add2Path /Verzeichnis*:
+  --> Funktion *_add2Path /Verzeichnis*:  
     `# Ergänzt den $PATH des Users um /Verzeichnis, wenn /Verzeichnis nicht existiert erfolgt eine Meldung darüber, ergänzt wird es aber`  
     
-  --> Funktion *_rmPath /Verzeichnis*:
+  --> Funktion *_rmPath /Verzeichnis*:  
     `# Entfernt /Verzeichnis aus $PATH des Users`  
     
   --> Funktion *_f2clb /Pfad/Datei [01]*:  
