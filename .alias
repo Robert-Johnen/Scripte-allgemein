@@ -262,8 +262,6 @@ alias mcb='mc ~/Bilder ~/Bilder/Bilder@mediaPi'
 alias mch='mc ~ /mnt/${USER}Pi'
 # diverse
 alias mplay='mplayer -nogui -fs -zoom'
-alias iset='IFS=$"\n\t"'
-alias ireset='IFS=$" \n\t"'
 #alias dir='ls -al "$@"'
 alias cgit='git commit -m "updated `date +%Y%m%d-%H%M%S`"; git push origin master'
 alias ydl='youtube-dl -a ~/ydl -o "~/Videos/e%(autonumber)02d.%(ext)s" --autonumber-start'
