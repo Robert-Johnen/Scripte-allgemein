@@ -11,7 +11,7 @@ best located in /usr/local/bin and best startet at boot-time with kdbremap.servi
   --> Function *_colorCodesPrompt*:    
     `# exporting Variables to enable colors at CLI`  
     
-  --> Fuction *_myPSx [01234]*:  
+  --> Function *_myPSx [01234]*:  
     `# Changes Prompt to my needs, Standard is colored: " $? ssh:user@host:~ $> "`  
   
   --> Function *_add2Path /directory*:  
