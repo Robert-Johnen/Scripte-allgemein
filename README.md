@@ -1,36 +1,32 @@
 # kurze Scripte
 
-- getMS-InstKey (Bash-Script) - Liest den MS-Installationsschlüssel aus den ACPI-Tabellen des UEFI/BIOS aus
-Der Zugriff auf diese Tabellen benötigt root-Rechte (deswegen sudo im Script).
+- getMS-InstKey (Bash-Script) - reading MS-installation-key from ACPI-table of UEFI/BIOS this needs root-privileges (for that sudo in Script).  
 
-- kbdremap.sh (Shell-Script) - Meine Tastatur ist auf einem refurbished-Computer mit neu beschrifteter Tastatur. 
-Ich habe darauf keine < und keine > Taste und kein | Pipe-Zeichen. Das definiere ich mit diesen Befehlszeilen um. 
-CAPS-LOCK und SHIFT-CAPS-LOCK werden zu < und >, SHIFT-SPACE zum | Pipe-Zeichen. 
-Am besten im Verzeichnis /usr/local/bin ablegen.
+- kbdremap.sh (Shell-Script) - had a refurbished-Computer with wrong keyboard (no < and > keys also no | Pipe. I redefined the keyboard systemwide to use CAPS-LOCK und SHIFT-CAPS-LOCK for < and >, SHIFT-SPACE for | Pipe. 
+best located in /usr/local/bin and best startet at boot-time with kdbremap.service.
 
-- kbdremap.service - hiermit starte ich das Script _kbdremap.sh_ als System-Service (mit systemctl) und 
-habe dann für alle Terminals und X die Tasten ab Systemstart zur Verfügung
+- kbdremap.service - starting Script _kbdremap.sh_ as System-Service (systemctl) at boot-time. After start all Terminals and X will used redefined keys
 
-- .alias - Funktionen und kurze Schnipsel, um das CLI für mich angenehmer zu machen:  
-  --> Funktion *_colorCodesPrompt*:    
-    `# exportiert Variablen an die Shell, um farbige Ausgaben zu ermöglichen`  
+- .alias - short lines and functions, for a better feeeling at CLI :  
+  --> Function *_colorCodesPrompt*:    
+    `# exporting Variables to enable colors at CLI`  
     
-  --> Funktion *_myPSx [01234]*:  
-    `# Ändert den Prompt so, wie ich ihne haben möchte, Standard ist bunt, " $? ssh:user@host:~ $> "`  
+  --> Fuction *_myPSx [01234]*:  
+    `# Changes Prompt to my needs, Standard is colored: " $? ssh:user@host:~ $> "`  
   
-  --> Funktion *_add2Path /Verzeichnis*:  
-    `# Ergänzt den $PATH des Users um /Verzeichnis, aber nur wenn /Verzeichnis noch nicht enthalten ist`  
+  --> Function *_add2Path /directory*:  
+    `# adds /directory to $PATH of user if not in use already`  
     
-  --> Funktion *_rmPath /Verzeichnis*:  
-    `# Entfernt /Verzeichnis aus $PATH des Users`  
+  --> Function *_rmPath /directory*:  
+    `# removes /driectory from $PATH of User`  
     
-  --> Funktion *_f2clb /Pfad/Datei [01]*:  
-    `# legt den Inhalt der Datei in die X-Zwischenablage (2. Parameter: 0 oder nichts , mit Intro und Abspann (Standard), 1 ohne Intro und Abspann) und wird von der Funktion _dc benötigt. Funktioniert auch mit Wayland.`
+  --> Funktion *_f2clb /dir/file [01]*:  
+    `# moves file to X-clipboard (2. Parameter: 0 or empty , with intro and ending (Standard), 1 without) needed by Function _dc and also usable with Wayland.`
     
-  --> Funktion *_dc "command"*:  
-    `# führt den Befehl 'command' aus, macht eine Ausgabe auf stdout und eine in die Datei /tmp/_dc.${USER}. Der Inhalt der Datei landet dabei direkt in der X-Zwischenablage.`  
+  --> Function *_dc "command"*:  
+    `# evaluates 'command', with shared output on stdout and into file /tmp/_dc.${USER}. file will be copiedto X-clipboard.`  
     
-  --> Funktion *_sucheSub String*:
-    `# sucht die Buchstabenfolge "String" in jedem alias, jeder geladenen Funktion und allen ausführbaren Dateien im Pfad und wirft alle Fundstellen als Ergebnis aus`  
+  --> Function *_sucheSub String*:
+    `# searching "String" in every alias, every loaded Function and all executable files in $PATH. Results on stdout.`  
        
        
