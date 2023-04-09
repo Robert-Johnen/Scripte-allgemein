@@ -1,20 +1,50 @@
 #!/bin/bash
 
+
 _colorCodesPrompt() {
-  ### setzt Variablen fuer die Farbcodes am Prompt im Terminal
-  export CRESET=$(echo -en '\001\033[0m\002')
-  export BLACK=$(echo -en '\001\033[01;30m\002')
-  export RED=$(echo -en '\001\033[01;31m\002')
-  export GREEN=$(echo -en '\001\033[01;32m\002')
-  export YELLOW=$(echo -en '\001\033[01;33m\002')
-  export BLUE=$(echo -en '\001\033[01;34m\002')
-  export MAGENTA=$(echo -en '\001\033[01;35m\002')
-  export CYAN=$(echo -en '\001\033[01;36m\002')
-  export LIGHTGRAY=$(echo -en '\001\033[01;37m\002')
-  export GRAY=$(echo -en '\001\033[01;90m\002')
-  export WHITE=$(echo -en '\001\033[01;97m\002')
-  export CGOOD=$(echo -en '\001\033[1;36;102m\002')
-  export CERROR=$(echo -en '\001\033[1;31;103m\002')
+  ### setzt Variablen fuer die Formatcodes am Prompt im Terminal
+  # Formatierungen
+  export FTNORM=$(echo -en '\001\033[0m\002')
+  export FTLIGHT=$(echo -en '\001\033[1m\002')
+  export FTDARK=$(echo -en '\001\033[2m\002')
+  export FTITALIC=$(echo -en '\001\033[3m\002')
+  export FTULINE=$(echo -en '\001\033[4m\002')
+  export FTBLINK=$(echo -en '\001\033[5m\002')
+  export FTGRAY=$(echo -en '\001\033[6m\002')
+  export FTINVERT=$(echo -en '\001\033[7m\002')
+  # Vordergrundfarben
+  export BLACK=$(echo -en '\001\033[30m\002')
+  export RED=$(echo -en '\001\033[31m\002')
+  export GREEN=$(echo -en '\001\033[32m\002')
+  export YELLOW=$(echo -en '\001\033[33m\002')
+  export BLUE=$(echo -en '\001\033[34m\002')
+  export MAGENTA=$(echo -en '\001\033[35m\002')
+  export CYAN=$(echo -en '\001\033[36m\002')
+  export GRAY=$(echo -en '\001\033[37m\002')
+  # Hintergrundfarben
+  export BBLACK=$(echo -en '\001\033[40m\002')
+  export BRED=$(echo -en '\001\033[41m\002')
+  export BGREEN=$(echo -en '\001\033[42m\002')
+  export BYELLOW=$(echo -en '\001\033[43m\002')
+  export BBLUE=$(echo -en '\001\033[44m\002')
+  export BMAGENTA=$(echo -en '\001\033[45m\002')
+  export BCYAN=$(echo -en '\001\033[46m\002')
+  export BWHITE=$(echo -en '\001\033[47m\002')
+  export BDGRAY=$(echo -en '\001\033[100m\002')
+  export BDRED=$(echo -en '\001\033[101m\002')
+  export BDGREEN=$(echo -en '\001\033[102m\002')
+  export BDYELLOW=$(echo -en '\001\033[103m\002')
+  export BDBLUE=$(echo -en '\001\033[104m\002')
+  export BDMAGENTA=$(echo -en '\001\033[105m\002')
+  export BDCYAN=$(echo -en '\001\033[106m\002')
+  export BGRAY=$(echo -en '\001\033[107m\002')
+  # Standardkombinationen
+  export STDFG=$GRAY
+  export STDBG=$BBLACK
+  export STDFT=$FTNORM
+  export CGOOD=$(echo ${FTDARK}${GREEN}${BDGREEN})
+  export CERROR=$(echo ${FTDARK}${RED}${BYELLOW})
+  export CSTD=$(echo ${STDFT}${STDFG}${STDBG})
   # printf "${CRESET}"
   }
 
@@ -29,8 +59,11 @@ export PS4_orig="${PS4}"
 
 # bei mir wird die Ausgabe des aktuellen Arbeitsverzeichnisses
 # auf /home/$USER geprüft und durch ~ ersetzt.
-# ist das irgendwo nicht der Fall macht die 
+# die Funktionprüft ob das ganze unter 18 Zeichenlang ist,
+# um im xterm die Titelleiste zu ändern, wenn die existiert.
+# ist das irgendwo nicht der Fall, macht die 
 # Funktion einfach nichts mit Errorlevel 0
+# 
 ppwd 2>/dev/null || ppwd() { true; }
 
 _myPSx() {
@@ -47,26 +80,26 @@ _myPSx() {
     # alles andere Standard des Systems wieder herstellen
     0 ) # mein Standardprompt bunt ganz kurz "ssh:user@host:~ $>"
       export PS0=''
-      export PS1='$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CRESET} \$> '
+      export PS1='$([[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${CSTD}${BLUE}\w${CSTD} \$> '
       ;;
     1 ) # Prompt extrem informativ
       # Startzeit des Jobs vor der Ausführung anzeigen
-      export PS0='${MAGENTA}>>> \d | \t Uhr >>>${CRESET}\n'
+      export PS0='${MAGENTA}>>> \d | \t Uhr >>>${CSTD}\n'
       # Ende-Zeit des Jobs anzeigen.
       # das ginge noch genauer, aber dann wird der Exitcode im Prompt vermasselt :-(. Der ist mir wichtiger.
       # Exitcode des letzten Prozesses sichern, Mails im Postfach / aktuelles Verzeichnis / laufende Hintergrundjobs / Mails im Postfach
       # Zahl der Links, Dateien, Verzeichnisse und FIFOs im akt. Verzeichnis
       # USER@HOST:PATH
       # das ganze schön bunt :-)
-      export PS1='${MAGENTA}<<< \d | \t Uhr <<<\n$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CRESET} ${WHITE}| Mails: $(grep -c "^Return-Path: " /var/spool/mail/${USER} 2>/dev/null || echo -n "0") | lfd. bg-Jobs: \j | lfd. screen: $(screen -ls 2>/dev/null | grep Detached | wc -l) | lfd. tmux: $(tmux ls 2>/dev/null | wc -l)\n${RED}[${BLUE}\W${RED}]${CYAN} | Links: $(ls -al | grep -e ^l | wc -l) | Verzeichnisse: $(ls -al | grep -e ^d | wc -l) | Dateien: $(ls -al | grep -e ^- | wc -l) | FIFOs: $(ls -al | grep -e ^p | wc -l)\n$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CRESET} \$> '
+      export PS1='${MAGENTA}<<< \d | \t Uhr <<<\n$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CSTD} ${WHITE}| Mails: $(grep -c "^Return-Path: " /var/spool/mail/${USER} 2>/dev/null || echo -n "0") | lfd. bg-Jobs: \j | lfd. screen: $(screen -ls 2>/dev/null | grep Detached | wc -l) | lfd. tmux: $(tmux ls 2>/dev/null | wc -l)\n${RED}[${BLUE}\W${RED}]${CYAN} | Links: $(ls -al | grep -e ^l | wc -l) | Verzeichnisse: $(ls -al | grep -e ^d | wc -l) | Dateien: $(ls -al | grep -e ^- | wc -l) | FIFOs: $(ls -al | grep -e ^p | wc -l)\n${CSTD}$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
       ;;
     2 ) # mein Standardprompt bunt in kurz "Errorlevel ssh:user@host:~ $>"
       export PS0=''
-      export PS1='$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CRESET} $( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CRESET} \$> '
+      export PS1='$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CSTD} $( [[ $UID -eq 0 ]] && echo ${RED} || echo ${YELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
       ;;
     3 ) # Prompt "~ $>"
       export PS0=''
-      export PS1='${BLUE}\w${CRESET} \$> '
+      export PS1='${BLUE}\w${CSTD} \$> '
       ;;
     * ) # Originalprompt des Systems wiederherstellen
       export PS0="${PS0_orig}"
@@ -126,7 +159,7 @@ _f2xcb() {
   [[ -e "${lv_datei}" ]] && { 
   #Datei existiert, dann
     [[ $lv_nointro -eq 0 ]] && echo -e "----8<----8<---- Datei: ${lv_datei##*/} ----8<----8<----\n"
-    # intro auf stdout, wenn gewuenscht
+    # Intro auf stdout, wenn gewuenscht
     cat "${lv_datei}" 
     # Dateiinhalt auf stdout
     [[ $lv_nointro -eq 0 ]] && echo -e "\n---->8---->8---- EOF ---->8---->8----"  
@@ -173,8 +206,8 @@ _dc() {
   # zwischengespeicherten Exitcode an stdout weiterreichen
   }
 
-# cd  nur durch Verzeichniseingabe
-# shopt -s autocd
+# cd nur durch Verzeichniseingabe
+shopt -s autocd
 
 _sucheSub() {
   ### suche nach Substring in alises, Funktionen, ausfuehrbaren Dateien
@@ -197,10 +230,10 @@ _sucheSub() {
     lv_substr="$1"
     # speichere in lokaler Variable
   fi
-  alias | grep "$lc_substr[^ ]*=" && lv_status=0
-  # suche in allen aliases und gebe alias aus,wenn lv_substr gefunden
+  alias | grep "$lv_substr[^ ]*=" && lv_status=0
+  # suche in allen aliases und gebe alias aus,wenn  lv_substr gefunden
   declare -F | awk '$3 !~ /^_/ {print $3"()"}' | fgrep "$lv_substr" && lv_status=0
-  # suche in alen geladenen Funktionen und gebe Funktionsname aus, wenn gefunden
+  # suche in allen geladenen Funktionen und gebe Funktionsname aus, wenn gefunden
   for lv_dir in $(sed 's/:/ /g' <<<$PATH); do
     #durchfortealle Verzeichnisse im Pfad
     for lv_file in $lv_dir/*"$lv_substr"*; do
@@ -214,7 +247,7 @@ _sucheSub() {
     done
   done
   return $lv_status
-  # ausgabe des Exitcodes wenn irgendwo gefunden dann true, wenn nirgendwo gefunden dann false
+  # Ausgabe des Exitcodes wenn irgendwo gefunden dann true, wenn nirgendwo gefunden dann false
   }
 
 alias dir='dir -l --color=auto'
@@ -250,21 +283,25 @@ alias xlog='less /var/log/Xorg.0.log'
 alias nlog='cat /var/log/tbsnews.log'
 alias slog='sudo journalctl -n 30 -f'
 # abkuerzungen mit mc
-alias mcsm='mc ~/bin/ServiceMenu ~/bin/ServiceMenu/in-use'
-alias mcsc='mc ~/bin ~/bin/scribus'
-alias mcgit='mc ~/bin ~/bin/git'
-alias mcrmd='mc /mnt/removableDrives ~'
-alias mcv='mc ~/Videos ~/Videos/Videos@mediaPi'
-alias mcm='mc ~/Musik ~/Musik/Musik@mediaPi'
-alias mcb='mc ~/Bilder ~/Bilder/Bilder@mediaPi'
-alias mch='mc ~ /mnt/${USER}Pi'
+#alias mcsm='mc ~/bin/ServiceMenu ~/bin/ServiceMenu/in-use'
+#alias mcsc='mc ~/bin ~/bin/scribus'
+#alias mcgit='mc ~/bin ~/bin/git'
+#alias mcrmd='mc /mnt/removableDrives ~'
+#alias mcv='mc ~/Videos ~/Videos/Videos@mediaPi'
+#alias mcm='mc ~/Musik ~/Musik/Musik@mediaPi'
+#alias mcb='mc ~/Bilder ~/Bilder/Bilder@mediaPi'
+#alias mch='mc ~ /mnt/${USER}Pi'
+alias mc='. /usr/share/mc/mc-wrapper.sh'
+# yakuake split screen
+alias ysv='lv_yaSID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.activeSessionId); lv_yaTID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.splitSessionLeftRight $lv_yaSID)'
+alias ysh='lv_yaSID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.activeSessionId); lv_yaTID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.splitSessionTopBottom $lv_yaSID)'
 # diverse
 alias mplay='mplayer -nogui -fs -zoom'
 #alias dir='ls -al "$@"'
 alias cgit='git commit -m "updated `date +%Y%m%d-%H%M%S`"; git push origin master'
 alias ydl='youtube-dl -a ~/ydl -o "~/Videos/e%(autonumber)02d.%(ext)s" --autonumber-start'
 #systemctl
-alias sysstat='sudo systemctl status'
-alias sysstop='sudo systemctl stop'
-alias sysstart='sudo systemctl start'
-alias journal='sudo journalctl'
+#alias sysstat='sudo systemctl status'
+#alias sysstop='sudo systemctl stop'
+#alias sysstart='sudo systemctl start'
+#alias journal='sudo journalctl'
