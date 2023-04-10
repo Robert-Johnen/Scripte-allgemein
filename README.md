@@ -18,15 +18,15 @@ best located in /usr/local/bin and best startet at boot-time with kdbremap.servi
     `# adds /directory to $PATH of user if not in use already`  
     
   --> Function *_rmPath /directory*:  
-    `# removes /driectory from $PATH of User`  
+    `# removes /directory from $PATH of user`  
     
   --> Funktion *_f2clb /dir/file [01]*:  
-    `# moves file to X-clipboard (2. Parameter: 0 or empty , with intro and ending (Standard), 1 without) needed by Function _dc and also usable with Wayland.`
+    `# moves file to X-clipboard (2. Parameter: 0 or empty , with intro and ending (Standard), 1 without) needed by function _dc and also usable with Wayland.`
     
   --> Function *_dc "command"*:  
     `# evaluates 'command', with shared output on stdout and into file /tmp/_dc.${USER}. file will be copiedto X-clipboard.`  
     
   --> Function *_sucheSub String*:
-    `# searching "String" in every alias, every loaded Function and all executable files in $PATH. Results on stdout.`  
+    `# searching "String" in every alias, every loaded function and all executable files in $PATH. Results on stdout.`  
        
        
