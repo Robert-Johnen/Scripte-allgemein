@@ -29,8 +29,8 @@ best located in /usr/local/bin and best startet at boot-time with kdbremap.servi
   --> Function *_dc "command"*:  
     `# evaluates 'command', with shared output on stdout and into file /tmp/_dc.${USER}. file will be copiedto X-clipboard.`  
   
-  - ssubexecs.sh - searches substring in all aliases, functions and executables in $PATH:  
-  --> Function *_sucheSub String*:
+- ssubexecs.sh - searches substring in all aliases, functions and executables in $PATH:  
+  --> Function *_sucheSub String*:  
     `# searching "String" in every alias, every loaded function and all executable files in $PATH. Results on stdout.`  
        
        
