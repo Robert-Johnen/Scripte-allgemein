@@ -14,7 +14,7 @@ best located in /usr/local/bin and best startet at boot-time with kdbremap.servi
   --> Function *_myPSx [01234]*:  
     `# Changes Prompt to my needs, Standard is colored: " $? ssh:user@host:~ $> "`  
   
-  - chpath.sh - adding and deleting parts of $PATH:  
+- chpath.sh - adding and deleting parts of $PATH:  
   --> Function *_add2Path /directory*:  
     `# adds /directory to $PATH of user if not in use already`  
     
