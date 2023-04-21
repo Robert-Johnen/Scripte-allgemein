@@ -12,8 +12,8 @@ _f2xcb() {
   # oder Umschalten auf anderes Kommando wenn Wayland
   if grep -Iq . "${lv_datei}"
     # Datei existiert und ist beliebiger Text (kein Binary)
-    # das funktioniert;-) sonst muss ich jede Menge 
-    # Mime-Typen (ASCII, Unicode, EPS, XML, ...)  prüfen
+    # das funktioniert ;-) Ich habe keinen Bock 
+    # Mime-Type_n_(sic!) zu prüfen
     then
     {
     [ $lv_nointro -eq 0 ] && echo -e "----8<---- Datei: ${lv_datei##*/} ----8<----\n"
