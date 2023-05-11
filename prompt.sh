@@ -75,34 +75,36 @@ _myPSx() {
   # schoene bunte Welt machen
   local lv_myPSx="${1:-0}"
   # Parameter in lokale Variable einlesen, wenn leer dann 0 (mein Standard)
-  set -o pipefail 
+#set -o pipefail 
   # ich will eine Fehlermeldung, wenn auch nur ein Befehl in einer Pipe fehlschlägt
+  # wird gebraucht wenn Fehler mit $? ausgelesen wird. bei ${PIPESTATUS[@]}
+  # bekomme ich den Errorlevel von jedem Kommando in der Pipe
   case  $lv_myPSx in
     # wenn 0 dann wird mein Standardprompt gesetzt
     # 1 Langversion, 2 Kurzversion, 3 nur Arbeitsverzeichnis
     # alles andere Standard des Systems wieder herstellen
     0 ) # mein Standardprompt bunt ganz kurz "ssh:user@host:~ $>"
       export PS0=''
-      export PS1='${CSTD}$([[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${CSTD}${BLUE}\w${CSTD} \$> '
+      export PS1='$([[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${CSTD}${BLUE}\w${CSTD} \$> '
       ;;
     1 ) # Prompt extrem informativ
       # Startzeit des Jobs vor der Ausführung anzeigen
-      export PS0='${CSTD}${MAGENTA}>>> \d | \t Uhr >>>${CSTD}\n'
+      export PS0='>>> \d | \t Uhr >>>\n'
       # Ende-Zeit des Jobs anzeigen.
       # das ginge noch genauer, aber dann wird der Exitcode im Prompt vermasselt :-(. Der ist mir wichtiger.
       # Exitcode des letzten Prozesses sichern, Mails im Postfach / aktuelles Verzeichnis / laufende Hintergrundjobs / Mails im Postfach
       # Zahl der Links, Dateien, Verzeichnisse und FIFOs im akt. Verzeichnis
       # USER@HOST:PATH
       # das ganze schön bunt :-)
-      export PS1='${CSTD}${MAGENTA}<<< \d | \t Uhr <<<\n$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CSTD} ${WHITE}| Mails: $(grep -c "^Return-Path: " /var/spool/mail/${USER} 2>/dev/null || echo -n "0") | lfd. bg-Jobs: \j | lfd. screen: $(screen -ls 2>/dev/null | grep Detached | wc -l) | lfd. tmux: $(tmux ls 2>/dev/null | wc -l)\n${RED}[${BLUE}\W${RED}]${CYAN} | Links: $(ls -al | grep -e ^l | wc -l) | Verzeichnisse: $(ls -al | grep -e ^d | wc -l) | Dateien: $(ls -al | grep -e ^- | wc -l) | FIFOs: $(ls -al | grep -e ^p | wc -l)\n${CSTD}$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
+      export PS1='<<< \d | \t Uhr <<<\n$( { lv_pecode=${PIPESTATUS[@]}; lv_ecode=$(printf "${lv_pecode[*]}" | tr " " "\n" | sort -nr | head -n1); [[ "$lv_ecode" == "0" ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ (${lv_pecode[@]}) "; } )${CSTD} ${MAGENTA}| Mails: $(grep -c "^Return-Path: " /var/spool/mail/${USER} 2>/dev/null || echo -n "0") | lfd. bg-Jobs: \j | lfd. screen: $(screen -ls 2>/dev/null | grep Detached | wc -l) | lfd. tmux: $(tmux ls 2>/dev/null | wc -l)\n${RED}[${BLUE}\W${RED}]${CYAN} | Links: $(ls -al | grep -e ^l | wc -l) | Verzeichnisse: $(ls -al | grep -e ^d | wc -l) | Dateien: $(ls -al | grep -e ^- | wc -l) | FIFOs: $(ls -al | grep -e ^p | wc -l)\n${CSTD}$( [[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
       ;;
     2 ) # mein Standardprompt bunt in kurz "Errorlevel ssh:user@host:~ $>"
       export PS0=''
-      export PS1='${CSTD}$( { lv_ecode=$?; [[ $lv_ecode -eq 0 ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ ($lv_ecode) "; } )${CSTD} $( [[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
+      export PS1='$( { lv_pecode=${PIPESTATUS[@]}; lv_ecode=$(printf "${lv_pecode[*]}" | tr " " "\n" | sort -nr | head -n1); [[ "$lv_ecode" == "0" ]] && echo "${CGOOD} ✓ " || echo "${CERROR} ✗ (${lv_pecode[@]}) "; } )${CSTD} $( [[ $UID -eq 0 ]] && echo ${RED} || echo ${DYELLOW})$([[ -z $SSH_CLIENT ]] || echo "ssh:")\u@\h:${BLUE}\w${CSTD} \$> '
       ;;
     3 ) # Prompt "~ $>"
       export PS0=''
-      export PS1='4{CSTD}${BLUE}\w${CSTD} \$> '
+      export PS1='${BLUE}\w${CSTD} \$> '
       ;;
     * ) # Originalprompt des Systems wiederherstellen
       export PS0="${PS0_orig}"
