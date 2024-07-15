@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+### diverse selbst erstellte Funktionen einbinden/sourcen
+for i in ~/bin/*._sh
+  do
+  . "${i}"
+  done
+
+
+# Abkuerzung fuer Verzeichnisse finden ;-)
+[[ -f /usr/share/autojump/autojump.bash ]] && . /usr/share/autojump/autojump.bash
+
+# cd nur durch Verzeichniseingabe
+shopt -s autocd
+
+alias ecode='echo -e "\$?:         $?\nPipestatus: ${PIPESTATUS[@]}"'
+alias dir='dir -l --color=auto'
+alias lc='ls --color=auto'
+
+# alles was Synchronisation und Backup angeht
+alias uniras='unison -ui text raspi'
+alias uniusb='unison -ui text usb'
+alias unisig='sync2sig'
+alias backupetc='sudo tar -cjpf ~/.backup/`date +%Y%m%d-%H%M%S`-etc@${HOSTname}.tar.bz2 /etc /usr/etc /usr/local/etc'
+alias backup='tar -cjpf ~/.backup/`date +%Y%m%d-%H%M%S`-${USER}@${HOSTNAME}.tar.bz2'
+
+# mounts
+alias mcpi='mc ~/.mnt/pi'
+alias mcmc='mc /mnt/MagentaCloud'
+alias mcid='mc ~/.mnt/iDings'
+
+#
+alias reb='sudo /sbin/shutdown -r now'
+alias hib='sudo /usr/sbin/s2ram'
+alias off='sudo /sbin/shutdown -h now'
+
+# Bluetooth schaltet sich manchmal ab
+alias btt='bluetooth toggle; sleep 5; bluetooth toggle;'
+alias bto='bluetooth on'
+alias btmaus='{ while : ; do echo -e "connect DC:2C:26:BB:46:D6\nquit" | bluetoothctl 1>/dev/null 2>&1; sleep 30; done; } &'
+
+# Logfiles und grafische darstellung
+alias bsplot='systemd-analyze plot > bootchart.svg && inkscape bootchart.svg && rm bootchart.svg'
+alias deplot='systemd-analyze dot | dot -Tsvg > abhaengigkeiten.svg && inkscape abhaengigkeiten.svg && rm abhaengigkeiten.svg'
+alias xlog='less /var/log/Xorg.0.log'
+alias nlog='cat /var/log/tbsnews.log'
+alias slog='sudo journalctl -n 30 -f'
+
+# yakuake split screen
+alias ysv='lv_yaSID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.activeSessionId); lv_yaTID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.splitSessionLeftRight $lv_yaSID)'
+alias ysh='lv_yaSID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.activeSessionId); lv_yaTID=$(qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.splitSessionTopBottom $lv_yaSID)'
+
+#systemctl
+#alias sysstat='sudo systemctl status'
+#alias sysstop='sudo systemctl stop'
+#alias sysstart='sudo systemctl start'
+#alias journal='sudo journalctl'
+
+# diverse
+alias mplay='mplayer -nogui -fs -zoom'
+alias sscd='shopt -s autocd'
+#alias dir='ls -al "$@"'
+alias chist="cat /dev/null > ~/.bash_history && history -c && exit"
+alias cgit='git commit -m "updated `date +%Y%m%d-%H%M%S`"; git push origin master'
+alias ydl='yt-dlp -a ~/ydl -o "~/Videos/e%(autonumber)02d.%(ext)s" --autonumber-start'
+alias cowshit='curl -s http://pasta.phyrama.com:8083/cgi-bin/live.exe | grep -Eo "^<li>.*</li>" | sed s,\</\\?li\>,,g | shuf -n 1 | cowsay'
+[[ -d /usr/share/mc/bin ]] && alias mc='. /usr/share/mc/bin/mc-wrapper.sh' || alias mc='. /usr/share/mc/mc-wrapper.sh'
